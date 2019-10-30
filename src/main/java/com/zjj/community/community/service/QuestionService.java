@@ -2,6 +2,8 @@ package com.zjj.community.community.service;
 
 import com.zjj.community.community.dto.PaginationDTO;
 import com.zjj.community.community.dto.QuestionDTO;
+import com.zjj.community.community.exception.CustomizeErrorCode;
+import com.zjj.community.community.exception.CustomizeException;
 import com.zjj.community.community.mapper.QuestionMapper;
 import com.zjj.community.community.mapper.UserMapper;
 import com.zjj.community.community.model.Question;
@@ -78,6 +80,9 @@ public class QuestionService {
 
     public QuestionDTO getQuestionById(Integer id) {
         Question question= questionMapper.selectByPrimaryKey(id);
+        if (question==null){
+            throw  new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+        }
         QuestionDTO questionDTO=new QuestionDTO();
         User user=userMapper.selectByPrimaryKey(question.getCreator());
         BeanUtils.copyProperties(question,questionDTO);
@@ -98,7 +103,10 @@ public class QuestionService {
             updateQuestion.setTag(question.getTag());
             QuestionExample example=new QuestionExample();
             example.createCriteria().andCreatorEqualTo(question.getId());
-            questionMapper.updateByExampleSelective(updateQuestion,example);
+            Integer updated=questionMapper.updateByExampleSelective(updateQuestion,example);
+            if (updated!=1){
+                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+            }
         }
     }
 }
