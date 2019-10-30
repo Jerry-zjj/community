@@ -1,7 +1,6 @@
 package com.zjj.community.community.controller;
 
 import com.zjj.community.community.dto.QuestionDTO;
-import com.zjj.community.community.mapper.QuesstionMappe;
 import com.zjj.community.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

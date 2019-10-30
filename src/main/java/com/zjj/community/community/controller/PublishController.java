@@ -1,7 +1,6 @@
 package com.zjj.community.community.controller;
 
 import com.zjj.community.community.dto.QuestionDTO;
-import com.zjj.community.community.mapper.QuesstionMappe;
 import com.zjj.community.community.model.Question;
 import com.zjj.community.community.model.User;
 import com.zjj.community.community.service.QuestionService;
