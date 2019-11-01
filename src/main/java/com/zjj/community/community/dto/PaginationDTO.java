@@ -19,6 +19,7 @@ public class PaginationDTO {
     private  int totalpage;
 
     public  void setPageination(Integer totolCount, Integer page, Integer size) {
+        //算出总页数
         totalpage=(totolCount%size==0)?(totolCount/size):(totolCount/size+1);
         if (page<1){
             page=1;

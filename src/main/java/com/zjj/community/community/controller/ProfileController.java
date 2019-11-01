@@ -17,7 +17,7 @@ public class ProfileController {
 
     @Autowired
     private QuestionService questionService;
-
+    //根据地址访问我的提问与最新回复
     @GetMapping("/profile/{action}")
     public  String  Profile(@PathVariable(name = "action") String action,
                             HttpServletRequest request,

@@ -13,7 +13,7 @@ public class IndexController {
 
     @Autowired
     private QuestionService questionService;
-
+    //主页分页显示
     @GetMapping("/")
     public String index(Model model,
                         @RequestParam(name = "page",defaultValue ="1") Integer page,

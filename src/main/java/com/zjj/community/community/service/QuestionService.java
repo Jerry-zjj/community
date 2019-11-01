@@ -4,6 +4,7 @@ import com.zjj.community.community.dto.PaginationDTO;
 import com.zjj.community.community.dto.QuestionDTO;
 import com.zjj.community.community.exception.CustomizeErrorCode;
 import com.zjj.community.community.exception.CustomizeException;
+import com.zjj.community.community.mapper.QuestionExtMapper;
 import com.zjj.community.community.mapper.QuestionMapper;
 import com.zjj.community.community.mapper.UserMapper;
 import com.zjj.community.community.model.Question;
@@ -24,11 +25,13 @@ public class QuestionService {
     private UserMapper userMapper;
     @Autowired
     private QuestionMapper questionMapper;
+
     @Autowired
-    private PaginationDTO paginationDTO;
+    private QuestionExtMapper questionExtMapper;
 
     public PaginationDTO list(Integer page, Integer size) {
         Integer totolCount = questionMapper.countByExample(new QuestionExample());
+        //总页数
         Integer totalpage=(totolCount%size==0)?(totolCount/size):(totolCount/size+1);
         Integer offset=(page<1)?0:size*(page-1);
         if (page>totalpage){
@@ -49,7 +52,7 @@ public class QuestionService {
         return paginationDTO;
     }
 
-    public PaginationDTO listById(Integer userId, Integer page, Integer size) {
+    public PaginationDTO listById(Long userId, Integer page, Integer size) {
         QuestionExample questionExample=new QuestionExample();
         questionExample.createCriteria()
                 .andCreatorEqualTo(userId);
@@ -78,7 +81,7 @@ public class QuestionService {
         return paginationDTO;
     }
 
-    public QuestionDTO getQuestionById(Integer id) {
+    public QuestionDTO getQuestionById(Long id) {
         Question question= questionMapper.selectByPrimaryKey(id);
         if (question==null){
             throw  new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
@@ -94,6 +97,9 @@ public class QuestionService {
         if (question.getId()==null){
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(question.getGmtCreate());
+            question.setViewCount(0);
+            question.setCommentCount(0);
+            question.setLikeCount(0);
             questionMapper.insert(question);
         }else {
             Question updateQuestion=new Question();
@@ -108,5 +114,13 @@ public class QuestionService {
                 throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
             }
         }
+    }
+
+    //增加阅读数
+    public void incView(Long id) {
+        Question question =new Question();
+        question.setId(id);
+        question.setViewCount(1);
+        questionExtMapper.incView(question);
     }
 }

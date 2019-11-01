@@ -19,8 +19,9 @@ public class PublishController {
     @Autowired
     public QuestionService questionService;
 
+    //提问
     @GetMapping("/publish/{id}")
-    public String edit(@PathVariable(name="id") Integer id,
+    public String edit(@PathVariable(name="id") Long id,
                        Model model,
                        HttpServletRequest request){
        QuestionDTO question= questionService.getQuestionById(id);
@@ -71,7 +72,7 @@ public class PublishController {
         question.setCreator(user.getId());
         question.setGmtCreate(System.currentTimeMillis());
         question.setGmtModified(question.getGmtCreate());
-        Integer id = (Integer)request.getSession().getAttribute("id");
+        Long id = (Long) request.getSession().getAttribute("id");
         question.setId(id);
         questionService.createOrUpdate(question);
         return "redirect:/";
